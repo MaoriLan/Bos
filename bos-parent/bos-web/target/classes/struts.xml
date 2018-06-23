@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.devMode" value="false" />
+	<!-- 
+		<constant name="struts.objectFactory" value="spring"/>
+	 -->
+	<package name="basicstruts2" extends="struts-default">
+		<interceptors>
+		   <interceptor name="myIntercepter" class="cn.itcast.bos.web.interceptor.MyIntercepter">
+		      <param name="excludeMethods">login</param>
+		   </interceptor>
+		   <interceptor-stack name="myStack">
+		      <interceptor-ref name="myIntercepter"></interceptor-ref>
+		      <interceptor-ref name="defaultStack"></interceptor-ref>
+		   </interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="myStack"></default-interceptor-ref>
+	
+		<global-results>
+		   <result name="login">/login.jsp</result>
+		   <result name="noPermissions">/unauthorized.html</result>
+		</global-results>
+		
+		 <global-exception-mappings>
+		    <exception-mapping result="noPermissions" exception="org.apache.shiro.authz.UnauthorizedException"></exception-mapping>
+		</global-exception-mappings>
+		<!-- 需要进行权限控制的页面访问 -->
+		<action name="page_*_*">
+			<result type="dispatcher">/WEB-INF/pages/{1}/{2}.jsp</result>
+		</action>
+		
+		<action name="UserAction_*" class="userAction" method="{1}">
+		   <result name="home">/index.jsp</result>
+		   <result name="list">/WEB-INF/pages/admin/userlist.jsp</result>
+		</action>
+		
+		<action name="StaffAction_*" class="staffAction" method="{1}">
+		   <result name="list">/WEB-INF/pages/base/staff.jsp</result>
+		</action>
+		<action name="RegionAction_*" class="regionAction" method="{1}">
+		   <result name="list">/WEB-INF/pages/base/region.jsp</result>
+		</action>
+		<action name="SubareaAction_*" class="subareaAction" method="{1}">
+		    <result name="list">/WEB-INF/pages/base/subarea.jsp</result>
+		</action>
+		<action name="DecidedZoneAction_*" class="decidedZoneAction" method="{1}">
+		    <result name="list">/WEB-INF/pages/base/decidedzone.jsp</result>
+		</action>
+		<action name="NoticeBillAction_*" class="noticeBillAction" method="{1}">
+		   <result name="toNoticebill">WEB-INF/pages/qupai/noticebill_add.jsp</result>
+		</action>
+		<action name="FunctionAction_*" class="functionAction" method="{1}">
+		    <result name="list">WEB-INF/pages/admin/function.jsp</result>
+		</action>
+		<action name="RoleAction_*" class="roleAction" method="{1}">
+		    <result name="list">WEB-INF/pages/admin/role.jsp</result>
+		</action>
+		
+		<action name="PhotoAction_*" class="cn.itcast.bos.web.action.PhotoAction" method="{1}">
+		    <result name="list">WEB-INF/pages/admin/role.jsp</result>
+		</action>
+	</package>
+</struts>
